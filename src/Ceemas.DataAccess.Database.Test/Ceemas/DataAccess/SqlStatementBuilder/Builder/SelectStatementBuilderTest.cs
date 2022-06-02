@@ -90,7 +90,7 @@ namespace Ceemas.DataAccess.Database.Test.Ceemas.DataAccess.SqlStatementBuilder.
                 select.From("SCHEMANAME", "TABLENAME", "ALIASNAME", columns =>
                     columns.TableColumn("COLUMN1", "COLUMNALIAS1"));
 
-                select.Join("SCHEMANAME1", "JOINNAME", "JOINALIAS", 
+                select.Join("SCHEMANAME1", "JOINNAME", "JOINALIAS",
                     join => join.Equal("TABLEALIAS", "COLUMN1", "JOINALIAS", "COLUMN_J_1"),
                     columns => columns
                     .TableColumn("COLUMN_J_1", "COLUMNALIAS_J_1")
@@ -99,6 +99,21 @@ namespace Ceemas.DataAccess.Database.Test.Ceemas.DataAccess.SqlStatementBuilder.
 
             var statement = statementBuilder.ToString();
             Assert.AreEqual("SELECT ALIASNAME.COLUMN1 AS COLUMNALIAS1, JOINALIAS.COLUMN_J_1 AS COLUMNALIAS_J_1, JOINALIAS.COLUMN_J_2 AS COLUMNALIAS_J_2 FROM SCHEMANAME.ALIASNAME ALIASNAME JOIN SCHEMANAME1.JOINALIAS JOINALIAS ON TABLEALIAS.COLUMN1 = JOINALIAS.COLUMN_J_1", statement);
+        }
+
+        [TestMethod]
+        public void SelectCountTest()
+        {
+            var statementBuilder = SqlStatement.Select(select =>
+            {
+                select.From("SCHEMANAME", "TABLENAME", "ALIASNAME", columns => columns
+                    .TableColumn("COLUMN1", "COLUMNALIAS1")
+                    .Count("COUNTCOLUMNNAME")
+                    );
+            });
+
+            var statement = statementBuilder.ToString();
+            Assert.AreEqual("SELECT ALIASNAME.COLUMN1 AS COLUMNALIAS1, COUNT(*) AS COUNTCOLUMNNAME FROM SCHEMANAME.ALIASNAME ALIASNAME", statement);
         }
     }
 }

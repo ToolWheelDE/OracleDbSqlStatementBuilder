@@ -39,7 +39,7 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Elements
             throw new NotImplementedException($"Die Elementgruppe '{element.GetType().Name}' kann in diesem Visitor nicht verarbeitet werden.");
         }
 
-        protected internal virtual void VisitAggregateElement(ElementVisitor element)
+        protected internal virtual void VisitAggregateElement(AggregateElement element)
         {
             throw new NotImplementedException($"Die Elementgruppe '{element.GetType().Name}' kann in diesem Visitor nicht verarbeitet werden.");
         }

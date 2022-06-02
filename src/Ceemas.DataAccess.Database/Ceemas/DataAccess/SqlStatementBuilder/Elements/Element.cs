@@ -209,14 +209,14 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Elements
 
         #endregion
 
-        //#region Aggregate-Functions
+        #region Aggregate-Functions
 
-        //public ColumnElement Count(string columnAliasName)
-        //{
-        //    return new ColumnElement(new AggregateElement(AggregateType.Count, null), columnAliasName);)
-        //}
+        public static AggregateElement Count(Element element)
+        {
+            return new AggregateElement(AggregateType.Count, element);
+        }
 
-        //#endregion
+        #endregion
 
         #endregion
 

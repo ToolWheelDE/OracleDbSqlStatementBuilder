@@ -8,11 +8,14 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
     public class ExpressionElementVisitor : ElementVisitor
     {
         private SqlStringBuilder sqlBuilder;
+        private ColumnElementVisitor columnElementVisitor;
         private bool notInFlag;
 
         public ExpressionElementVisitor(SqlStringBuilder sqlBuilder)
         {
             this.sqlBuilder = sqlBuilder;
+
+            columnElementVisitor = new ColumnElementVisitor(sqlBuilder, false);
         }
 
         public override void Visit(Element element)
@@ -104,7 +107,7 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
 
         protected internal override void VisitColumnElement(ColumnElement columnElement)
         {
-            ColumnElementGenerator.ExpressionTableColumn(sqlBuilder, columnElement);
+            columnElementVisitor.Visit(columnElement);
         }
     }
 }

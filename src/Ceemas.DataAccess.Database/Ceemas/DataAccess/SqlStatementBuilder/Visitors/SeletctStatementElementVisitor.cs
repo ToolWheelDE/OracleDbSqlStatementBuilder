@@ -10,12 +10,14 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
     {
         private SqlStringBuilder sqlBuilder;
         private ExpressionElementVisitor expressionVisitor;
+        private ColumnElementVisitor columnElementVisitor;
 
         public SeletctStatementElementVisitor(SqlStringBuilder sqlBuilder)
         {
             this.sqlBuilder = sqlBuilder;
 
             expressionVisitor = new ExpressionElementVisitor(sqlBuilder);
+            columnElementVisitor = new ColumnElementVisitor(sqlBuilder,true);
         }
 
         protected internal override void VisitStatementElement(StatementElement statementElement)
@@ -36,7 +38,7 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
 
                         var columns = fromColumns.Union(joinColumns).ToArray();
 
-                        ArrayJoinEnumerator(columns, seperator => sqlBuilder.Append(", "), columnElement => Visit(columnElement));
+                        ArrayJoinEnumerator(columns, seperator => sqlBuilder.Append(", "), columnElement => columnElementVisitor.Visit(columnElement));
 
                         sqlBuilder.Append(" FROM ");
                         ArrayJoinEnumerator(selectStatementElement.FromStatementElements, seperator => sqlBuilder.Append(", "), element => Visit(element));
@@ -107,11 +109,6 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
                 sqlBuilder.Append(" ");
                 sqlBuilder.Append(fromElement.TableAliasName);
             }
-        }
-
-        protected internal override void VisitColumnElement(ColumnElement element)
-        {
-            ColumnElementGenerator.SelectTableColumn(sqlBuilder, element);
         }
 
         protected internal override void VisitOrderByElement(OrderByElement orderByElement)

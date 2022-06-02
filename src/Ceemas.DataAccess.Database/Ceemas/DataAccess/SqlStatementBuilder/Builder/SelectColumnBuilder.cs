@@ -21,5 +21,10 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Builder
             columns.Add(Element.TableColumn(tableAliasName, columnName, aliasName));
             return this;
         }
+
+        public void Count(string columnAliasName)
+        {
+            columns.Add(Element.Column(Element.Count(null), columnAliasName));
+        }
     }
 }
