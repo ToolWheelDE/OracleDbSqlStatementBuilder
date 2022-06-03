@@ -16,8 +16,8 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
         {
             this.sqlBuilder = sqlBuilder;
 
-            expressionVisitor = new ExpressionElementVisitor(sqlBuilder);
-            columnElementVisitor = new ColumnElementVisitor(sqlBuilder,true);
+            columnElementVisitor = new ColumnElementVisitor(sqlBuilder, true);
+            expressionVisitor = new ExpressionElementVisitor(sqlBuilder, columnElementVisitor);
         }
 
         protected internal override void VisitStatementElement(StatementElement statementElement)

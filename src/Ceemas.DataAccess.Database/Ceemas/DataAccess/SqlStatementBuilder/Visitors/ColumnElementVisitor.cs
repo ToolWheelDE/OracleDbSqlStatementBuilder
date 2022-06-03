@@ -7,11 +7,23 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
     {
         private readonly SqlStringBuilder sqlBuilder;
         private readonly bool isSelect;
+        private readonly ExpressionElementVisitor expressionElementVisitor;
+        private readonly AggregateElementVisitor aggregateElementVisitor;
 
         public ColumnElementVisitor(SqlStringBuilder sqlBuilder, bool isSelect)
         {
             this.sqlBuilder = sqlBuilder;
             this.isSelect = isSelect;
+            this.expressionElementVisitor = new ExpressionElementVisitor(sqlBuilder, this);
+            this.aggregateElementVisitor = new AggregateElementVisitor(sqlBuilder, this);
+        }
+
+        public ColumnElementVisitor(SqlStringBuilder sqlBuilder, ExpressionElementVisitor expressionElementVisitor, bool isSelect)
+        {
+            this.sqlBuilder = sqlBuilder;
+            this.isSelect = isSelect;
+            this.expressionElementVisitor = expressionElementVisitor;
+            this.aggregateElementVisitor = new AggregateElementVisitor(sqlBuilder);
         }
 
         protected internal override void VisitColumnElement(ColumnElement element)
@@ -34,23 +46,7 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
 
         protected internal override void VisitAggregateElement(AggregateElement element)
         {
-            switch (element.AggregateType)
-            {
-                case AggregateType.Count:
-                    {
-                        sqlBuilder.Append("COUNT");
-                        sqlBuilder.Append("(");
-                        if(element.Expression == null)
-                        {
-                            sqlBuilder.Append("*");
-                        }
-                        sqlBuilder.Append(")");
-                    }
-                    break;
-
-                default:
-                    throw new NotImplementedException($"Aggregatfunktion {element.AggregateType} nicht implementiert");
-            }
+            aggregateElementVisitor.Visit(element);
         }
 
         //public static void ExpressionTableColumn(SqlStringBuilder sqlBuilder, ColumnElement element)
