@@ -1,4 +1,4 @@
-﻿using Ceemas.DataAccess.SqlStatementBuilder.Elements;
+﻿using Ceemas.DataAccess.Core.SqlStatementBuilder.Elements;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
