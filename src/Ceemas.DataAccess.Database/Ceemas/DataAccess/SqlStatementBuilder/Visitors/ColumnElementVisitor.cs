@@ -23,7 +23,7 @@ namespace Ceemas.DataAccess.SqlStatementBuilder.Visitors
             this.sqlBuilder = sqlBuilder;
             this.isSelect = isSelect;
             this.expressionElementVisitor = expressionElementVisitor;
-            this.aggregateElementVisitor = new AggregateElementVisitor(sqlBuilder);
+            this.aggregateElementVisitor = new AggregateElementVisitor(sqlBuilder,expressionElementVisitor);
         }
 
         protected internal override void VisitColumnElement(ColumnElement element)
